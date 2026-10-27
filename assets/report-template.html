@@ -1,0 +1,718 @@
+<div id="__NASH_ROOT_ID__" class="nash-report">
+  <style>
+    #__NASH_ROOT_ID__ {
+      display: grid;
+      gap: 1.25rem;
+      color: var(--foreground);
+    }
+    #__NASH_ROOT_ID__ .nash-header,
+    #__NASH_ROOT_ID__ .nash-section,
+    #__NASH_ROOT_ID__ .nash-recommendation,
+    #__NASH_ROOT_ID__ .nash-controls,
+    #__NASH_ROOT_ID__ .nash-followup {
+      display: grid;
+      gap: 0.75rem;
+    }
+    #__NASH_ROOT_ID__ .nash-title-row,
+    #__NASH_ROOT_ID__ .nash-meta,
+    #__NASH_ROOT_ID__ .nash-label-row,
+    #__NASH_ROOT_ID__ .nash-followup-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    #__NASH_ROOT_ID__ h1,
+    #__NASH_ROOT_ID__ h2,
+    #__NASH_ROOT_ID__ h3,
+    #__NASH_ROOT_ID__ p {
+      margin: 0;
+    }
+    #__NASH_ROOT_ID__ .nash-kicker,
+    #__NASH_ROOT_ID__ .nash-meta,
+    #__NASH_ROOT_ID__ .nash-note,
+    #__NASH_ROOT_ID__ .nash-source {
+      color: var(--muted-foreground);
+    }
+    #__NASH_ROOT_ID__ .nash-live-value {
+      font-weight: 500;
+    }
+    #__NASH_ROOT_ID__ .nash-control-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    #__NASH_ROOT_ID__ .nash-control {
+      min-width: 0;
+    }
+    #__NASH_ROOT_ID__ .nash-scale {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      color: var(--muted-foreground);
+    }
+    #__NASH_ROOT_ID__ .nash-fit-wrap {
+      display: grid;
+      grid-template-columns: minmax(7rem, 1fr) minmax(8rem, 2fr) auto;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    #__NASH_ROOT_ID__ .nash-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    #__NASH_ROOT_ID__ .nash-risk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    #__NASH_ROOT_ID__ .nash-list {
+      margin: 0;
+      padding-inline-start: 1.15rem;
+    }
+    #__NASH_ROOT_ID__ .nash-list li + li {
+      margin-top: 0.35rem;
+    }
+    #__NASH_ROOT_ID__ .nash-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 0.75rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #__NASH_ROOT_ID__ .nash-flow li {
+      display: grid;
+      gap: 0.3rem;
+      padding-inline-start: 0.75rem;
+      border-inline-start: 3px solid var(--viz-series-1);
+    }
+    #__NASH_ROOT_ID__ .nash-player {
+      display: grid;
+      gap: 0.2rem;
+    }
+    #__NASH_ROOT_ID__ .nash-player + .nash-player {
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border);
+    }
+    #__NASH_ROOT_ID__ details summary {
+      font-weight: 500;
+    }
+    #__NASH_ROOT_ID__ details[open] summary {
+      margin-bottom: 0.65rem;
+    }
+    #__NASH_ROOT_ID__ .nash-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    #__NASH_ROOT_ID__ .nash-evidence-group {
+      min-width: 0;
+    }
+    #__NASH_ROOT_ID__ .nash-evidence-item + .nash-evidence-item {
+      margin-top: 0.65rem;
+    }
+    #__NASH_ROOT_ID__ .nash-source {
+      overflow-wrap: anywhere;
+    }
+    #__NASH_ROOT_ID__ .nash-status {
+      min-height: 1.25rem;
+    }
+    @media (max-width: 680px) {
+      #__NASH_ROOT_ID__ .nash-control-grid,
+      #__NASH_ROOT_ID__ .nash-detail-grid,
+      #__NASH_ROOT_ID__ .nash-risk-grid,
+      #__NASH_ROOT_ID__ .nash-facts {
+        grid-template-columns: 1fr;
+      }
+      #__NASH_ROOT_ID__ .nash-fit-wrap {
+        grid-template-columns: 1fr;
+      }
+      #__NASH_ROOT_ID__ .nash-fit-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+
+  <header class="nash-header">
+    <div class="nash-title-row">
+      <div>
+        <div class="nash-kicker text-small">Nash decision brief</div>
+        <h1 data-nash-title></h1>
+      </div>
+      <span class="viz-badge" data-nash-status></span>
+    </div>
+    <p data-nash-question></p>
+    <div class="nash-meta text-small">
+      <span data-nash-as-of></span>
+      <span data-nash-confidence></span>
+    </div>
+    <p class="nash-note text-small" data-nash-method-note></p>
+  </header>
+
+  <section class="card">
+    <div class="nash-recommendation" aria-live="polite">
+      <div class="nash-label-row">
+      <span class="text-small text-muted">当前假设下的推荐</span>
+      <span class="nash-live-value" data-nash-live-fit></span>
+      </div>
+      <h2 class="nash-answer" data-nash-recommendation></h2>
+      <p data-nash-rationale></p>
+      <div class="nash-detail-grid">
+        <div>
+          <h3>下一步</h3>
+          <p data-nash-next-step></p>
+        </div>
+        <div>
+          <h3>最佳备选</h3>
+          <p data-nash-best-alternative></p>
+        </div>
+        <div>
+          <h3>翻转条件</h3>
+          <p data-nash-reversal-trigger></p>
+        </div>
+      </div>
+      <p class="text-small text-muted" data-nash-human-gate></p>
+    </div>
+  </section>
+
+  <section class="nash-controls" aria-labelledby="nash-assumptions-heading">
+    <div class="nash-label-row">
+      <h2 id="nash-assumptions-heading">调整关键假设</h2>
+      <span class="text-small text-muted" data-nash-simulation>只改变情景，不改变原始证据</span>
+    </div>
+    <div class="nash-control-grid" data-nash-controls></div>
+  </section>
+
+  <section class="nash-section" aria-labelledby="nash-strategies-heading">
+    <div class="nash-label-row">
+      <h2 id="nash-strategies-heading">策略稳定性</h2>
+      <span class="text-small text-muted">相对情景适配度，不是成功概率</span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">策略</th>
+            <th scope="col">情景适配</th>
+            <th scope="col">对方下一步</th>
+          </tr>
+        </thead>
+        <tbody data-nash-strategies></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="nash-section" data-nash-strategy-detail aria-live="polite">
+        <div class="nash-label-row">
+        <h3 data-nash-detail-title></h3>
+        <span class="viz-badge" data-nash-detail-fit></span>
+        </div>
+        <p data-nash-detail-summary></p>
+        <div class="nash-detail-grid">
+          <div>
+            <h3>成立条件</h3>
+            <ul class="nash-list" data-nash-conditions></ul>
+          </div>
+          <div>
+            <h3>取舍</h3>
+            <ul class="nash-list" data-nash-tradeoffs></ul>
+          </div>
+          <div>
+            <h3>预期回应</h3>
+            <p data-nash-next-response></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="nash-section" aria-labelledby="nash-flow-heading">
+    <h2 id="nash-flow-heading">行动—回应路径</h2>
+    <ol class="nash-flow" data-nash-flow></ol>
+  </section>
+
+  <section class="nash-section" aria-labelledby="nash-players-heading">
+    <h2 id="nash-players-heading">参与者与隐藏角色</h2>
+    <div data-nash-players></div>
+  </section>
+
+  <details open>
+    <summary>证据、推断与未知</summary>
+    <div class="nash-facts" data-nash-evidence></div>
+  </details>
+
+  <details>
+    <summary>Context trace</summary>
+    <div class="nash-detail-grid">
+      <div>
+        <h3>使用的来源</h3>
+        <ul class="nash-list" data-nash-context-sources></ul>
+      </div>
+      <div>
+        <h3>未读取 / 省略</h3>
+        <ul class="nash-list" data-nash-context-omissions></ul>
+      </div>
+      <div>
+        <h3>时效与脱敏</h3>
+        <ul class="nash-list" data-nash-context-warnings></ul>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>风险与心理过滤</summary>
+    <div class="nash-section">
+      <div class="nash-risk-grid">
+        <div>
+          <h3>主要代价</h3>
+          <p data-nash-main-downside></p>
+        </div>
+        <div>
+          <h3>停止条件</h3>
+          <ul class="nash-list" data-nash-stop-conditions></ul>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">风险</th>
+              <th scope="col">严重度</th>
+              <th scope="col">可能性</th>
+              <th scope="col">缓解动作</th>
+            </tr>
+          </thead>
+          <tbody data-nash-risks></tbody>
+        </table>
+      </div>
+      <div data-nash-psychology></div>
+    </div>
+  </details>
+
+  <section class="nash-followup">
+    <hr>
+    <div class="nash-followup-row">
+      <div>
+        <h2>继续探索</h2>
+        <p class="text-small text-muted">把当前假设和选中的策略带回 thread，让 `/nash` 重新分析。</p>
+      </div>
+      <button type="button" class="btn btn-primary" data-nash-followup>按当前假设重跑</button>
+    </div>
+    <p class="nash-status text-small" data-nash-message aria-live="polite"></p>
+  </section>
+</div>
+
+<script type="application/json" id="__NASH_ROOT_ID__-data">__NASH_DATA__</script>
+<script>
+(() => {
+  const root = document.getElementById("__NASH_ROOT_ID__");
+  const dataNode = document.getElementById("__NASH_ROOT_ID__-data");
+  if (!root || !dataNode) return;
+
+  const report = JSON.parse(dataNode.textContent);
+  const by = (selector) => root.querySelector(selector);
+  const all = (selector) => Array.from(root.querySelectorAll(selector));
+  const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
+  const escapeText = (value) => String(value ?? "");
+  const parameterMap = new Map(report.parameters.map((item) => [item.id, item]));
+  const defaultParams = Object.fromEntries(report.parameters.map((item) => [item.id, item.value]));
+  const saved = window.openai?.widgetState?.modelContent;
+  const savedPrivate = window.openai?.widgetState?.privateContent;
+  let values = { ...defaultParams, ...(saved?.parameters || {}) };
+  let selectedId = savedPrivate?.selectedStrategyId || report.decision.recommended_strategy_id;
+
+  function fitFor(strategy) {
+    let fit = Number(strategy.base_fit || 0);
+    for (const [id, coefficient] of Object.entries(strategy.sensitivity || {})) {
+      const parameter = parameterMap.get(id);
+      if (!parameter) continue;
+      fit += Number(coefficient) * (Number(values[id]) - Number(parameter.value));
+    }
+    return Math.round(clamp(fit, 0, 100));
+  }
+
+  function fitLabel(score) {
+    if (score >= 75) return "稳健";
+    if (score >= 55) return "可行";
+    if (score >= 35) return "依赖条件";
+    return "脆弱";
+  }
+
+  function rankedStrategies() {
+    return report.strategies
+      .map((strategy) => ({ strategy, fit: fitFor(strategy) }))
+      .sort((a, b) => b.fit - a.fit);
+  }
+
+  function renderDecisionContext(ranked) {
+    const top = ranked[0].strategy;
+    const baseline = top.id === report.decision.recommended_strategy_id;
+    setText("[data-nash-rationale]", baseline ? report.decision.rationale : top.summary);
+    setText("[data-nash-next-step]", baseline ? report.decision.next_step : top.summary);
+    setText(
+      "[data-nash-best-alternative]",
+      baseline ? report.decision.best_alternative : `${ranked[1]?.strategy.name || "无"}：${ranked[1]?.strategy.summary || ""}`
+    );
+    setText(
+      "[data-nash-reversal-trigger]",
+      baseline ? report.decision.reversal_trigger : "这是本地敏感性排序变化；请按当前假设重跑后，再更新翻转条件和行动建议。"
+    );
+    setText(
+      "[data-nash-main-downside]",
+      baseline ? report.decision.main_downside : (top.tradeoffs || []).slice(-1)[0] || "需要重跑后评估。"
+    );
+  }
+
+  function updateSimulationLabel() {
+    const changed = report.parameters.some((item) => Number(values[item.id]) !== Number(item.value));
+    const node = by("[data-nash-simulation]");
+    if (!node) return;
+    node.textContent = changed
+      ? "本地敏感性模拟 · 尚未重读 context"
+      : "基于已读取证据的初始假设";
+  }
+
+  function setText(selector, text) {
+    const node = by(selector);
+    if (node) node.textContent = escapeText(text);
+  }
+
+  function listInto(node, items) {
+    node.replaceChildren(...items.map((item) => {
+      const li = document.createElement("li");
+      li.textContent = escapeText(item);
+      return li;
+    }));
+  }
+
+  function renderControls() {
+    const host = by("[data-nash-controls]");
+    host.replaceChildren(...report.parameters.map((parameter) => {
+      const wrap = document.createElement("div");
+      wrap.className = "nash-control";
+      const labelRow = document.createElement("div");
+      labelRow.className = "nash-label-row";
+      const label = document.createElement("label");
+      label.className = "form-label";
+      label.htmlFor = `${root.id}-${parameter.id}`;
+      label.textContent = parameter.label;
+      const value = document.createElement("span");
+      value.className = "nash-live-value tabular-nums";
+      value.dataset.valueFor = parameter.id;
+      value.textContent = values[parameter.id];
+      labelRow.append(label, value);
+      const input = document.createElement("input");
+      input.id = `${root.id}-${parameter.id}`;
+      input.className = "form-range";
+      input.type = "range";
+      input.min = parameter.min;
+      input.max = parameter.max;
+      input.step = parameter.step;
+      input.value = values[parameter.id];
+      input.dataset.parameterId = parameter.id;
+      input.setAttribute("aria-label", parameter.label);
+      const scale = document.createElement("div");
+      scale.className = "nash-scale text-small";
+      const low = document.createElement("span");
+      low.textContent = parameter.low_label;
+      const high = document.createElement("span");
+      high.textContent = parameter.high_label;
+      scale.append(low, high);
+      wrap.append(labelRow, input, scale);
+      return wrap;
+    }));
+  }
+
+  function renderStrategies() {
+    updateSimulationLabel();
+    const ranked = rankedStrategies();
+    const top = ranked[0];
+    const body = by("[data-nash-strategies]");
+    body.replaceChildren(...ranked.map(({ strategy, fit }) => {
+      const row = document.createElement("tr");
+      const nameCell = document.createElement("td");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `btn btn-ghost${strategy.id === selectedId ? " is-selected" : ""}`;
+      button.dataset.strategyId = strategy.id;
+      button.setAttribute("aria-pressed", strategy.id === selectedId ? "true" : "false");
+      button.textContent = `${strategy.id === top.strategy.id ? "◆ " : ""}${strategy.name}`;
+      nameCell.append(button);
+      const fitCell = document.createElement("td");
+      const fitWrap = document.createElement("div");
+      fitWrap.className = "nash-fit-wrap";
+      const fitLabelNode = document.createElement("div");
+      fitLabelNode.className = "nash-fit-label";
+      const fitText = document.createElement("span");
+      fitText.textContent = fitLabel(fit);
+      const fitNumber = document.createElement("span");
+      fitNumber.className = "tabular-nums";
+      fitNumber.textContent = `${fit}/100`;
+      fitLabelNode.append(fitText, fitNumber);
+      const track = document.createElement("div");
+      track.className = "progress";
+      track.setAttribute("role", "progressbar");
+      track.setAttribute("aria-label", `${strategy.name} 情景适配度`);
+      track.setAttribute("aria-valuenow", fit);
+      track.setAttribute("aria-valuemin", "0");
+      track.setAttribute("aria-valuemax", "100");
+      const bar = document.createElement("div");
+      bar.className = "progress-bar";
+      bar.style.width = `${fit}%`;
+      track.append(bar);
+      fitWrap.append(fitLabelNode, track);
+      fitCell.append(fitWrap);
+      const responseCell = document.createElement("td");
+      responseCell.textContent = strategy.next_response;
+      row.append(nameCell, fitCell, responseCell);
+      return row;
+    }));
+
+    const recommended = top.strategy;
+    setText("[data-nash-recommendation]", recommended.name);
+    setText("[data-nash-live-fit]", `${fitLabel(top.fit)} · ${top.fit}/100`);
+    renderDecisionContext(ranked);
+    if (!report.strategies.some((item) => item.id === selectedId)) selectedId = recommended.id;
+    renderSelected();
+  }
+
+  function renderSelected() {
+    const strategy = report.strategies.find((item) => item.id === selectedId) || report.strategies[0];
+    const fit = fitFor(strategy);
+    setText("[data-nash-detail-title]", strategy.name);
+    setText("[data-nash-detail-fit]", `${fitLabel(fit)} · ${fit}/100`);
+    setText("[data-nash-detail-summary]", strategy.summary);
+    setText("[data-nash-next-response]", strategy.next_response);
+    listInto(by("[data-nash-conditions]"), strategy.conditions || []);
+    listInto(by("[data-nash-tradeoffs]"), strategy.tradeoffs || []);
+  }
+
+  function evidenceGroup(title, items, kind) {
+    const section = document.createElement("section");
+    section.className = "nash-evidence-group";
+    const heading = document.createElement("h3");
+    heading.textContent = `${title} · ${items.length}`;
+    section.append(heading);
+    for (const item of items) {
+      const block = document.createElement("div");
+      block.className = "nash-evidence-item";
+      const claim = document.createElement("p");
+      claim.textContent = item.claim || item.question || "";
+      block.append(claim);
+      const notes = [];
+      if (kind === "fact") {
+        notes.push(item.source_path || "来源未显示");
+        notes.push(`截至 ${item.as_of || "unknown"} · ${item.freshness || "unknown"}`);
+      } else if (kind === "inference") {
+        notes.push(`依据 ${item.basis || "未列"} · 置信度 ${item.confidence || "unknown"}`);
+        if (item.falsifier) notes.push(`证伪条件：${item.falsifier}`);
+      } else {
+        notes.push(`影响：${item.impact || "未评估"}`);
+        if (item.resolution) notes.push(`最快核验：${item.resolution}`);
+      }
+      for (const text of notes) {
+        const note = document.createElement("div");
+        note.className = "nash-source text-small";
+        note.textContent = text;
+        if (kind === "fact" && item.source_path) note.dataset.tooltip = item.source_path;
+        block.append(note);
+      }
+      section.append(block);
+    }
+    return section;
+  }
+
+  function renderStatic() {
+    setText("[data-nash-title]", report.meta.title);
+    setText("[data-nash-question]", report.meta.question);
+    const statusLabels = {
+      candidate: "稳定结果候选 · 定性",
+      none: "未发现稳健稳定结果",
+      proven: "形式 Nash 均衡 · 已验证",
+      "not-assessed": "未评估稳定性"
+    };
+    setText("[data-nash-status]", statusLabels[report.meta.equilibrium_status] || "未评估稳定性");
+    setText("[data-nash-as-of]", `证据截至 ${report.meta.as_of}`);
+    setText("[data-nash-confidence]", `置信度：${report.meta.confidence}`);
+    setText(
+      "[data-nash-method-note]",
+      report.meta.equilibrium_status === "proven"
+        ? "已使用显式策略、payoff 与完整 best-response check 验证。"
+        : "这是在明确假设下的定性稳定性判断，不是数学 Nash 均衡证明。"
+    );
+    setText("[data-nash-human-gate]", `Human gate：${report.decision.human_gate}`);
+    setText("[data-nash-next-step]", report.decision.next_step);
+    setText("[data-nash-best-alternative]", report.decision.best_alternative);
+    setText("[data-nash-reversal-trigger]", report.decision.reversal_trigger);
+    setText("[data-nash-main-downside]", report.decision.main_downside);
+    listInto(by("[data-nash-stop-conditions]"), report.decision.stop_conditions || []);
+    listInto(by("[data-nash-context-sources]"), report.context.sources_used || []);
+    listInto(by("[data-nash-context-omissions]"), report.context.omissions || []);
+    listInto(
+      by("[data-nash-context-warnings]"),
+      [...(report.context.stale_warnings || []), ...(report.context.redactions || [])]
+    );
+
+    const flow = by("[data-nash-flow]");
+    flow.replaceChildren(...report.response_tree.map((step) => {
+      const li = document.createElement("li");
+      const ifNode = document.createElement("strong");
+      ifNode.textContent = step.if;
+      const thenNode = document.createElement("span");
+      thenNode.textContent = step.then;
+      const ownerNode = document.createElement("span");
+      ownerNode.className = "text-small text-muted";
+      ownerNode.textContent = `${step.owner}${step.checkpoint ? ` · ${step.checkpoint}` : ""}`;
+      li.append(ifNode, thenNode, ownerNode);
+      return li;
+    }));
+
+    const players = by("[data-nash-players]");
+    players.replaceChildren(...report.players.map((player) => {
+      const item = document.createElement("div");
+      item.className = "nash-player";
+      const heading = document.createElement("div");
+      const name = document.createElement("strong");
+      name.textContent = player.name;
+      const role = document.createElement("span");
+      role.className = "text-small text-muted";
+      role.textContent = ` · ${player.hidden ? "隐藏角色" : player.role}`;
+      heading.append(name, role);
+      const objective = document.createElement("span");
+      objective.textContent = `目标：${player.objective}`;
+      const move = document.createElement("span");
+      move.className = "text-small text-muted";
+      move.textContent = `可能动作：${player.likely_move}`;
+      const batna = document.createElement("span");
+      batna.className = "text-small text-muted";
+      batna.textContent = `BATNA：${player.batna}`;
+      const constraints = document.createElement("span");
+      constraints.className = "text-small text-muted";
+      constraints.textContent = `约束：${(player.constraints || []).join("；") || "未列"}`;
+      const leverage = document.createElement("span");
+      leverage.className = "text-small text-muted";
+      leverage.textContent = `杠杆：${(player.leverage || []).join("；") || "未列"}`;
+      item.append(heading, objective, move, batna, constraints, leverage);
+      return item;
+    }));
+
+    const evidence = by("[data-nash-evidence]");
+    evidence.replaceChildren(
+      evidenceGroup("事实", report.evidence.facts || [], "fact"),
+      evidenceGroup("推断", report.evidence.inferences || [], "inference"),
+      evidenceGroup("未知", report.evidence.unknowns || [], "unknown")
+    );
+
+    const risks = by("[data-nash-risks]");
+    risks.replaceChildren(...report.risks.map((risk) => {
+      const row = document.createElement("tr");
+      for (const value of [risk.name, risk.severity, risk.likelihood, risk.mitigation]) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.append(cell);
+      }
+      return row;
+    }));
+
+    const psychology = by("[data-nash-psychology]");
+    psychology.replaceChildren(...report.psychology.map((item) => {
+      const block = document.createElement("div");
+      block.className = "nash-player";
+      const heading = document.createElement("strong");
+      heading.textContent = item.pattern;
+      const signal = document.createElement("span");
+      signal.textContent = item.signal;
+      const countermove = document.createElement("span");
+      countermove.className = "text-small text-muted";
+      countermove.textContent = `校正：${item.countermove}`;
+      block.append(heading, signal, countermove);
+      return block;
+    }));
+  }
+
+  function persist() {
+    window.openai?.setWidgetState?.({
+      modelContent: {
+        nashQuestion: report.meta.question,
+        parameters: values,
+        selectedStrategyId: selectedId
+      },
+      privateContent: { selectedStrategyId: selectedId }
+    }).catch(() => {});
+  }
+
+  function applyExternalState(state) {
+    const incoming = state?.modelContent?.parameters;
+    if (incoming && typeof incoming === "object") {
+      values = { ...values, ...incoming };
+      for (const input of all("[data-parameter-id]")) {
+        const value = values[input.dataset.parameterId];
+        if (value !== undefined) input.value = value;
+      }
+      for (const node of all("[data-value-for]")) node.textContent = values[node.dataset.valueFor];
+    }
+    const incomingSelected = state?.privateContent?.selectedStrategyId;
+    if (incomingSelected) selectedId = incomingSelected;
+    renderStrategies();
+  }
+
+  renderStatic();
+  renderControls();
+  renderStrategies();
+
+  root.addEventListener("input", (event) => {
+    const input = event.target.closest("[data-parameter-id]");
+    if (!input) return;
+    values[input.dataset.parameterId] = Number(input.value);
+    setText(`[data-value-for="${input.dataset.parameterId}"]`, input.value);
+    renderStrategies();
+    persist();
+  });
+
+  root.addEventListener("click", async (event) => {
+    const strategyButton = event.target.closest("[data-strategy-id]");
+    if (strategyButton) {
+      selectedId = strategyButton.dataset.strategyId;
+      for (const button of all("[data-strategy-id]")) {
+        const selected = button.dataset.strategyId === selectedId;
+        button.classList.toggle("is-selected", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+      }
+      renderSelected();
+      persist();
+      return;
+    }
+
+    if (!event.target.closest("[data-nash-followup]")) return;
+    const message = by("[data-nash-message]");
+    if (!window.openai?.sendFollowUpMessage) {
+      message.textContent = "当前客户端不支持直接回传；请在 thread 里输入 /nash 并说明要调整的假设。";
+      return;
+    }
+    const changedParameters = report.parameters
+      .filter((item) => Number(values[item.id]) !== Number(item.value));
+    const parameterText = changedParameters.length
+      ? changedParameters.map((item) => `${item.label}=${values[item.id]}`).join("；")
+      : "未修改（使用报告基线）";
+    const selected = report.strategies.find((item) => item.id === selectedId);
+    message.textContent = "正在把当前情景带回 thread…";
+    try {
+      await window.openai.sendFollowUpMessage({
+        title: "用当前假设重跑 Nash 分析",
+        prompt: `/nash 请重新分析场景 ${report.meta.slug}。相对基线的假设变化：${parameterText}。我正在重点探索策略「${selected?.name || selectedId}」。请重新读取受影响的本地 context，保留事实/推断/未知的证据边界，并生成更新后的可视化报告。`
+      });
+      message.textContent = "已发送。";
+    } catch (error) {
+      message.textContent = "发送失败，请在 thread 中手动输入 /nash 重跑。";
+    }
+  });
+
+  window.addEventListener("openai:set_globals", (event) => {
+    if (event.detail?.globals?.widgetState) applyExternalState(event.detail.globals.widgetState);
+  });
+})();
+</script>

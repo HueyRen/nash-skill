@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nash"
+  short_description: "Local-context game and negotiation decision analysis"
+  default_prompt: "Read the current thread and relevant local context, run a sourced Nash-style analysis, and return an explorable report without asking me to fill a form."
